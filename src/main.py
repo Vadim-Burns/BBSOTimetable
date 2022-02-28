@@ -1,7 +1,8 @@
 import telebot
 from keyboards import main_markup
+from config import BOT_TOKEN
 
-bot = telebot.TeleBot("5187039085:AAFJfEjUNtG_ISbUS-LqE1-fRT1uAeAUrpo", parse_mode=None)
+bot = telebot.TeleBot(BOT_TOKEN, parse_mode=None)
 
 
 @bot.message_handler(commands=['start'])
