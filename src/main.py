@@ -1,19 +1,23 @@
 import telebot
+
 from keyboards import main_markup
 from config import BOT_TOKEN
 from timetable import get_today_timetable, get_tomorrow_timetable, get_after_tomorrow_timetable, \
     get_current_week_timetable, get_next_week_timetable
+from users_storage import update
 
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="html")
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    update(message.from_user.username)
     bot.send_message(message.chat.id, "Здарова, путник", reply_markup=main_markup)
 
 
 @bot.message_handler(content_types=['text'])
 def process_keyboard(message):
+    update(message.from_user.username)
     if message.text == "Расписание на сегодня":
         bot.send_message(message.chat.id, get_today_timetable())
     elif message.text == "Расписание на завтра":
@@ -29,5 +33,5 @@ def process_keyboard(message):
 
 
 if __name__ == '__main__':
-    print("Bot has been started!")
+    print("Bot has been started!", flush=True)
     bot.infinity_polling()
