@@ -1,11 +1,12 @@
+import logging
+
 import telebot
 
-from keyboards import main_markup
 from config import BOT_TOKEN
+from keyboards import main_markup
 from timetable import get_today_timetable, get_tomorrow_timetable, get_after_tomorrow_timetable, \
     get_current_week_timetable, get_next_week_timetable
 from users_storage import update
-import logging
 
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="html")
 telebot.logger.setLevel(logging.INFO)

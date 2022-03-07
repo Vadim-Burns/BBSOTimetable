@@ -1,7 +1,8 @@
-from bot import bot
-from flask import Flask, request
-from config import HOOK_URL, HOOK_SERVER, HOOK_PORT, PRIVATE_KEY, PUBLIC_KEY
 import telebot
+from flask import Flask, request
+
+from bot import bot
+from config import HOOK_URL, HOOK_SERVER, HOOK_PORT, PRIVATE_KEY, PUBLIC_KEY
 
 app = Flask(__name__)
 
@@ -16,12 +17,10 @@ if __name__ == '__main__':
     bot.remove_webhook()
 
     if HOOK_SERVER != "":
-        print(
-            bot.set_webhook(
-                url=f"https://{HOOK_SERVER}:{HOOK_PORT}/{HOOK_URL}",
-                certificate=open(PUBLIC_KEY),
-                allowed_updates=[]
-            )
+        bot.set_webhook(
+            url=f"https://{HOOK_SERVER}:{HOOK_PORT}/{HOOK_URL}",
+            certificate=open(PUBLIC_KEY),
+            allowed_updates=[]
         )
         print(f"Webhook set on https://{HOOK_SERVER}:{HOOK_PORT}/{HOOK_URL}", flush=True)
 
