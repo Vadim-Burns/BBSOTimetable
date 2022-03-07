@@ -9,6 +9,11 @@ HOOK_PORT = os.environ.get("HOOK_PORT", 8080)
 # HOOK_URL - url of hook
 HOOK_URL = os.environ.get("HOOK_URL", str(uuid.uuid4()))
 
+# Path to private certification key
+PRIVATE_KEY = os.environ.get("PRIVATE_KEY", "private.key")
+# Path to public certification key
+PUBLIC_KEY = os.environ.get("PUBLIC_KEY", "public.pem")
+
 # Week number from start of the year
 START_WEEK = 6
 EVEN_WEEK = {

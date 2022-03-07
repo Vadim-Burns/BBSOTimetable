@@ -20,7 +20,7 @@ Telegram bot in Python for getting current timetable of BBSO-01-21 group.
 ## Docker
 ### Running container example
 If you want to use webhook
-1. `docker run -d --name bot -eBOT_TOKEN='YOUR_TOKEN' -eHOOK_SERVER='YOUR_URL_OR_IP' -eHOOK_PORT=443 -p 443:443 bbso_bot`
+1. `docker run -d --name bot -eBOT_TOKEN='YOUR_TOKEN' -eHOOK_SERVER='YOUR_URL_OR_IP' -eHOOK_PORT=443 -p 0.0.0.0:443:443 bbso_bot`
 
 If you want polling
 1. `docker run -d --name bot -eBOT_TOKEN='YOUR_TOKEN' bbso_bot`
@@ -28,7 +28,7 @@ If you want polling
 ### Creating docker image from source
 1. `make docker`
 
-### Running docker image
+### Running docker image(polling)
 1. `export BOT_TOKEN='YOUR_TOKEN'`
 2. `make docker-run`
 
@@ -37,3 +37,9 @@ If you want polling
 
 ### Deleting image for docker local repository
 1. `make docker-clean`
+
+## Generating certificates
+1. `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 365 -out public.pem` in src directory
+2. `make`
+
+Your docker image with your keys is ready

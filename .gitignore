@@ -1,3 +1,5 @@
 /venv/
 /.idea/
 /src/__pycache__/
+/src/private.key
+/src/public.pem
