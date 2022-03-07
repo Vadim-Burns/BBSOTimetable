@@ -1,6 +1,18 @@
 import os
+import uuid
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+
+# HOOK_SERVER - ip or url of server where bot is serving
+HOOK_SERVER = os.environ.get("HOOK_SERVER", "")
+HOOK_PORT = os.environ.get("HOOK_PORT", 8080)
+# HOOK_URL - url of hook
+HOOK_URL = os.environ.get("HOOK_URL", str(uuid.uuid4()))
+
+# Path to private certification key
+PRIVATE_KEY = os.environ.get("PRIVATE_KEY", "private.key")
+# Path to public certification key
+PUBLIC_KEY = os.environ.get("PUBLIC_KEY", "public.pem")
 
 # Week number from start of the year
 START_WEEK = 6

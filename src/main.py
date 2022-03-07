@@ -1,37 +1,32 @@
 import telebot
+from flask import Flask, request
 
-from keyboards import main_markup
-from config import BOT_TOKEN
-from timetable import get_today_timetable, get_tomorrow_timetable, get_after_tomorrow_timetable, \
-    get_current_week_timetable, get_next_week_timetable
-from users_storage import update
+from bot import bot
+from config import HOOK_URL, HOOK_SERVER, HOOK_PORT, PRIVATE_KEY, PUBLIC_KEY
 
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode="html")
+app = Flask(__name__)
 
 
-@bot.message_handler(commands=['start'])
-def start(message):
-    update(message.from_user.username)
-    bot.send_message(message.chat.id, "Здарова, путник", reply_markup=main_markup)
-
-
-@bot.message_handler(content_types=['text'])
-def process_keyboard(message):
-    update(message.from_user.username)
-    if message.text == "Расписание на сегодня":
-        bot.send_message(message.chat.id, get_today_timetable())
-    elif message.text == "Расписание на завтра":
-        bot.send_message(message.chat.id, get_tomorrow_timetable())
-    elif message.text == "Расписание на послезавтра":
-        bot.send_message(message.chat.id, get_after_tomorrow_timetable())
-    elif message.text == "Расписание на текущую неделю":
-        for day in get_current_week_timetable():
-            bot.send_message(message.chat.id, day)
-    elif message.text == "Расписание на следующую неделю":
-        for day in get_next_week_timetable():
-            bot.send_message(message.chat.id, day)
+@app.route(f"/{HOOK_URL}", methods=['POST'])
+def hook():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
 
 
 if __name__ == '__main__':
-    print("Bot has been started!", flush=True)
-    bot.infinity_polling()
+    bot.remove_webhook()
+
+    if HOOK_SERVER != "":
+        bot.set_webhook(
+            url=f"https://{HOOK_SERVER}:{HOOK_PORT}/{HOOK_URL}",
+            certificate=open(PUBLIC_KEY),
+            allowed_updates=[]
+        )
+        print(f"Webhook set on https://{HOOK_SERVER}:{HOOK_PORT}/{HOOK_URL}", flush=True)
+
+        print("Starting flask", flush=True)
+        app.run(host="0.0.0.0", port=HOOK_PORT, ssl_context=(PUBLIC_KEY, PRIVATE_KEY))
+
+    else:
+        print("Bot has been started!", flush=True)
+        bot.infinity_polling()
