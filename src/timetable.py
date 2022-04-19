@@ -100,3 +100,15 @@ def get_next_week_timetable() -> list[str]:
         )
 
     return days
+
+
+def get_current_group(current_week: int) -> str:
+    current_week = current_week % 3
+
+    if current_week == 2:
+        return "АЛЬФА"
+
+    if current_week == 0:
+        return "БЕТА"
+
+    return "ГАММА"

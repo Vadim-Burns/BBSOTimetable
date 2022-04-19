@@ -5,7 +5,7 @@ import telebot
 from config import BOT_TOKEN
 from keyboards import main_markup
 from timetable import get_today_timetable, get_tomorrow_timetable, get_after_tomorrow_timetable, \
-    get_current_week_timetable, get_next_week_timetable, get_current_week
+    get_current_week_timetable, get_next_week_timetable, get_current_week, get_current_group
 from users_storage import update
 
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="html")
@@ -22,6 +22,12 @@ def start(message):
 def week(message):
     update(message.from_user.username)
     bot.send_message(message.chat.id, f"Текущая неделя под номером {get_current_week()}")
+
+
+@bot.message_handler(commands=['group'])
+def group(message):
+    update(message.from_user.username)
+    bot.send_message(message.chat.id, f"На этой неделе ходит группа {get_current_group(get_current_week())}")
 
 
 @bot.message_handler(content_types=['text'])
